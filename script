@@ -1,1 +1,1 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/v1ain/dead-rails-notifier-v0.1/refs/heads/main/main"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/v1ain/dead-rails-v0.1/refs/heads/main/main"))()
