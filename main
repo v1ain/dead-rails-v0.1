@@ -1,0 +1,59 @@
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+
+local player = Players.LocalPlayer
+repeat wait() until player.Character
+local character = player.Character
+local rootPart = character:WaitForChild("HumanoidRootPart")
+
+local currentMessage = ""
+
+local function isBehind(playerPos, objectPos, lookVector)
+    local direction = (objectPos - playerPos).unit
+    return direction:Dot(lookVector) < 0
+end
+
+local function showNotification(message)
+    if message ~= currentMessage then
+        StarterGui:SetCore("SendNotification", {
+            Title = "[Script]",
+            Text = message,
+            Duration = 5 -- Сообщение будет на экране 5 секунд
+        })
+        currentMessage = message
+    end
+end
+
+local function checkFolder(folderName)
+    local folder = workspace:FindFirstChild(folderName)
+    if not folder then return false end
+
+    for _, model in ipairs(folder:GetChildren()) do
+        if model:IsA("Model") and model.PrimaryPart then
+            local distance = (model.PrimaryPart.Position - rootPart.Position).Magnitude
+            local lookVector = rootPart.CFrame.LookVector
+
+            if not isBehind(rootPart.Position, model.PrimaryPart.Position, lookVector) then
+                local range = distance < 200 and "near" or "far"
+                local message = string.format('Found an "%s" %s away', model.Name, range)
+                showNotification(message)
+                return true -- Нашли объект, можно остановить проверку
+            end
+        end
+    end
+
+    return false -- Ничего не найдено
+end
+
+local function checkBuildings()
+    if checkFolder("RandomBuildings") or checkFolder("Towns") then
+        return -- Если что-то найдено, не очищаем сообщение
+    end
+    currentMessage = "" -- Если объектов нет, очищаем сообщение
+end
+
+-- Проверяем каждые 1 секунду
+while true do
+    checkBuildings()
+    wait(1)
+end
