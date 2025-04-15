@@ -1,0 +1,329 @@
+
+-- Tab Buttons
+local TabsFrame = Instance.new("Frame", MainFrame)
+TabsFrame.Name = "TabsFrame"
+TabsFrame.Size = UDim2.new(1, 0, 0, 30)
+TabsFrame.Position = UDim2.new(0, 0, 0, 30)
+TabsFrame.BackgroundTransparency = 1
+
+local function createTab(name, position)
+    local tab = Instance.new("TextButton", TabsFrame)
+    tab.Name = name
+    tab.Text = name
+    tab.Size = UDim2.new(0, 100, 1, 0)
+    tab.Position = UDim2.new(0, position, 0, 0)
+    tab.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    tab.TextColor3 = Color3.new(1, 1, 1)
+    tab.Font = Enum.Font.SourceSansBold
+    tab.TextSize = 16
+    local corner = Instance.new("UICorner", tab)
+    corner.CornerRadius = UDim.new(0, 6)
+    return tab
+end
+
+local tabTeleports = createTab("Teleports", 5)
+local tabHubs = createTab("Hubs", 110)
+local tabPlayer = createTab("Player", 215)
+
+-- Content Frame
+local ContentFrame = Instance.new("Frame", MainFrame)
+ContentFrame.Name = "ContentFrame"
+ContentFrame.Position = UDim2.new(0, 0, 0, 60)
+ContentFrame.Size = UDim2.new(1, 0, 1, -60)
+ContentFrame.BackgroundTransparency = 1
+
+-- Scrolling UI for content
+local Scrolling = Instance.new("ScrollingFrame", ContentFrame)
+Scrolling.Name = "Scrolling"
+Scrolling.Size = UDim2.new(1, 0, 1, 0)
+Scrolling.CanvasSize = UDim2.new(0, 0, 2, 0)
+Scrolling.ScrollBarThickness = 8
+Scrolling.BackgroundTransparency = 1
+Scrolling.AutomaticCanvasSize = Enum.AutomaticSize.Y
+Scrolling.ScrollingDirection = Enum.ScrollingDirection.Y
+
+local UIListLayout = Instance.new("UIListLayout", Scrolling)
+UIListLayout.Padding = UDim.new(0, 5)
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+-- Tab Switching
+local function clearButtons()
+    for _, child in pairs(Scrolling:GetChildren()) do
+        if child:IsA("TextButton") then
+            child:Destroy()
+        end
+    end
+end
+
+local function loadTeleports()
+    clearButtons()
+    local teleports = {
+        {"Tp to End", "https://raw.githubusercontent.com/TwoGunVolley/Dedrail/refs/heads/main/Protected_8860927939362090.txt"},
+        {"Tp to Fort", "https://raw.githubusercontent.com/ringtaa/Tpfort.github.io/refs/heads/main/Tpfort.lua"},
+        {"Tp to Castle", "https://raw.githubusercontent.com/ringtaa/castletpfast.github.io/refs/heads/main/FASTCASTLE.lua"},
+        {"Tp to TeslaLab", "https://raw.githubusercontent.com/ringtaa/tptotesla.github.io/refs/heads/main/Tptotesla.lua"},
+        {"Tp to Sterling", "https://raw.githubusercontent.com/ringtaa/sterlingnotifcation.github.io/refs/heads/main/Sterling.lua"},
+    }
+    for _, data in ipairs(teleports) do
+        createButton(Scrolling, data[1], data[1], function()
+            loadstring(game:HttpGet(data[2]))()
+        end)
+    end
+end
+
+local function loadHubs()
+    clearButtons()
+    local hubs = {
+        {"NullFire (Keyless)", "https://raw.githubusercontent.com/InfernusScripts/Null-Fire/main/Loader"},
+        {"SkullHub (Key)", "https://skullhub.xyz/loader.lua"},
+        {"Fern Hub (Keyless)", "https://raw.githubusercontent.com/Mrpopcatfrombupge/FernHub/refs/heads/main/DeadRailsFarm"},
+        {"Simple Bond AutoFarm V1.5 (Keyless)", "--// Bonds Farm V1.5
+
+local Cooldown = 0.1
+
+local TrackCount = 1 local BondCount = 0 local TrackPassed = false local FoundLobby = false
+
+if game.PlaceId == 116495829188952 then
+
+local CreateParty = game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("CreatePartyClient")
+local HRP = game.Players.LocalPlayer.Character.HumanoidRootPart
+
+while task.wait(Cooldown) do
+if FoundLobby == false then
+print("Finding Lobby...")
+for i,v in pairs(game:GetService("Workspace").TeleportZones:GetChildren()) do
+if v.Name == "TeleportZone" and v.BillboardGui.StateLabel.Text == "Waiting for players..." then
+print("Lobby Found!")
+HRP.CFrame = v.ZoneContainer.CFrame
+FoundLobby = true
+task.wait(1)
+CreateParty:FireServer({["maxPlayers"] = 1})
+end
+end
+end
+end
+
+elseif game.PlaceId == 70876832253163 then
+
+local StartingTrack = game:GetService("Workspace").RailSegments:FindFirstChild("RailSegment")
+local CollectBond = game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("ActivateObjectClient")
+local Items = game:GetService("Workspace").RuntimeItems
+local HRP = game.Players.LocalPlayer.Character.HumanoidRootPart
+
+HRP.Anchored = true
+
+while task.wait(Cooldown) do
+if TrackPassed == false then
+print("Teleporting to track", TrackCount)
+TrackPassed = true
+end
+HRP.CFrame = StartingTrack.Guide.CFrame + Vector3.new(0,250,0)
+if StartingTrack.NextTrack.Value ~= nil then
+StartingTrack = StartingTrack.NextTrack.Value
+TrackCount += 1
+else
+game:GetService("TeleportService"):Teleport(116495829188952, game:GetService("Players").LocalPlayer)
+end
+repeat
+for i,v in pairs(Items:GetChildren()) do
+if v.Name == "Bond" or v.Name == "BondCalculated" then
+spawn(function()
+for i = 1, 1000 do
+pcall(function()
+v.Part.CFrame = HRP.CFrame
+end)
+end
+CollectBond:FireServer(v)
+end)
+if v.Name == "Bond" then
+BondCount += 1
+print("Got", BondCount, "Bonds")
+v.Name = "BondCalculated"
+end
+end
+end
+task.wait()
+until Items:FindFirstChild("Bond") == nil
+TrackPassed = false
+end
+
+end"},
+        {"Tbao Hub (Keyless)", "https://raw.githubusercontent.com/tbao143/thaibao/refs/heads/main/TbaoHubDeadRails"},
+        {"SpiderXHub", "https://raw.githubusercontent.com/SpiderScriptRB/Dead-Rails-SpiderXHub-Script/refs/heads/main/SpiderXHub%202.0.txt"},
+        {"Tora is Me Hub", "https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/DeadRails"},
+        {"Speed Hub X", "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"},
+        {"Bond AutoFarm By Emplic", "https://raw.githubusercontent.com/Emplic/deathrails/refs/heads/main/bond"},
+    }
+    for _, data in ipairs(hubs) do
+        createButton(Scrolling, data[1], data[1], function()
+            if string.find(data[2], "https") then
+                loadstring(game:HttpGet(data[2], true))()
+            else
+                loadstring(data[2])()
+            end
+        end)
+    end
+end
+
+-- Tab Listeners
+tabTeleports.MouseButton1Click:Connect(loadTeleports)
+tabHubs.MouseButton1Click:Connect(loadHubs)
+tabPlayer.MouseButton1Click:Connect(function()
+    clearButtons()
+    -- Will be implemented in next continuation
+end)
+
+-- Default tab
+loadTeleports()
+
+
+-- ======================================= --
+
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Function to create slider UI
+local function createSlider(labelText, minValue, maxValue, defaultValue, onChanged)
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(1, -20, 0, 60)
+    frame.BackgroundTransparency = 1
+
+    local label = Instance.new("TextLabel", frame)
+    label.Text = labelText
+    label.Size = UDim2.new(0.5, 0, 0.4, 0)
+    label.Position = UDim2.new(0, 0, 0, 0)
+    label.BackgroundTransparency = 1
+    label.Font = Enum.Font.SourceSans
+    label.TextColor3 = Color3.new(1, 1, 1)
+    label.TextSize = 16
+    label.TextXAlignment = Enum.TextXAlignment.Left
+
+    local valueBox = Instance.new("TextBox", frame)
+    valueBox.Size = UDim2.new(0.5, 0, 0.4, 0)
+    valueBox.Position = UDim2.new(0.5, 0, 0, 0)
+    valueBox.Text = tostring(defaultValue)
+    valueBox.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    valueBox.TextColor3 = Color3.new(1, 1, 1)
+    valueBox.Font = Enum.Font.SourceSans
+    valueBox.TextSize = 16
+
+    local slider = Instance.new("TextButton", frame)
+    slider.Size = UDim2.new(1, 0, 0.4, 0)
+    slider.Position = UDim2.new(0, 0, 0.6, 0)
+    slider.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+    slider.Text = ""
+    local inner = Instance.new("Frame", slider)
+    inner.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+    inner.Size = UDim2.new((defaultValue - minValue)/(maxValue - minValue), 0, 1, 0)
+    inner.Name = "Inner"
+    inner.BorderSizePixel = 0
+
+    local corner = Instance.new("UICorner", slider)
+    corner.CornerRadius = UDim.new(0, 6)
+    local innerCorner = Instance.new("UICorner", inner)
+    innerCorner.CornerRadius = UDim.new(0, 6)
+
+    valueBox.FocusLost:Connect(function()
+        local num = tonumber(valueBox.Text)
+        if num then
+            num = math.clamp(num, minValue, maxValue)
+            inner.Size = UDim2.new((num - minValue)/(maxValue - minValue), 0, 1, 0)
+            onChanged(num)
+        end
+    end)
+
+    slider.MouseButton1Down:Connect(function()
+        local uis = game:GetService("UserInputService")
+        local conn
+        conn = uis.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement then
+                local rel = (input.Position.X - slider.AbsolutePosition.X) / slider.AbsoluteSize.X
+                rel = math.clamp(rel, 0, 1)
+                inner.Size = UDim2.new(rel, 0, 1, 0)
+                local value = math.floor(minValue + (maxValue - minValue) * rel)
+                valueBox.Text = tostring(value)
+                onChanged(value)
+            end
+        end)
+        uis.InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                conn:Disconnect()
+            end
+        end)
+    end)
+
+    return frame
+end
+
+-- Function to create toggle
+local function createToggle(text, default, callback)
+    local toggle = Instance.new("TextButton")
+    toggle.Size = UDim2.new(1, -20, 0, 30)
+    toggle.BackgroundColor3 = default and Color3.fromRGB(0, 200, 100) or Color3.fromRGB(80, 80, 80)
+    toggle.Text = text
+    toggle.TextColor3 = Color3.new(1, 1, 1)
+    toggle.Font = Enum.Font.SourceSans
+    toggle.TextSize = 16
+    local corner = Instance.new("UICorner", toggle)
+    corner.CornerRadius = UDim.new(0, 6)
+
+    toggle.MouseButton1Click:Connect(function()
+        default = not default
+        toggle.BackgroundColor3 = default and Color3.fromRGB(0, 200, 100) or Color3.fromRGB(80, 80, 80)
+        callback(default)
+    end)
+
+    return toggle
+end
+
+tabPlayer.MouseButton1Click:Connect(function()
+    clearButtons()
+
+    local wsSlider = createSlider("WalkSpeed", 1, 100, 16, function(val)
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+            LocalPlayer.Character.Humanoid.WalkSpeed = val
+        end
+    end)
+    wsSlider.Parent = Scrolling
+
+    local jpSlider = createSlider("JumpPower", 1, 500, 50, function(val)
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+            LocalPlayer.Character.Humanoid.JumpPower = val
+        end
+    end)
+    jpSlider.Parent = Scrolling
+
+    local fbToggle = createToggle("Full Bright", false, function(state)
+        if state then
+            game.Lighting.Ambient = Color3.new(1, 1, 1)
+            game.Lighting.Brightness = 5
+        else
+            game.Lighting.Ambient = Color3.new(0.5, 0.5, 0.5)
+            game.Lighting.Brightness = 2
+        end
+    end)
+    fbToggle.Parent = Scrolling
+
+    local noclipToggle = createToggle("Noclip", false, function(state)
+        if state then
+            noclipConnection = game:GetService("RunService").Stepped:Connect(function()
+                if LocalPlayer.Character then
+                    for _, v in pairs(LocalPlayer.Character:GetDescendants()) do
+                        if v:IsA("BasePart") and v.CanCollide then
+                            v.CanCollide = false
+                        end
+                    end
+                end
+            end)
+        else
+            if noclipConnection then
+                noclipConnection:Disconnect()
+            end
+        end
+    end)
+    noclipToggle.Parent = Scrolling
+end)
+
+
+-- ======================================= --
